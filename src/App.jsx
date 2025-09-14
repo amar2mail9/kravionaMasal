@@ -8,11 +8,11 @@ import Contact from "./components/Contact/Contact";
 import About from "./components/About/About";
 import Product from "./components/prodouct/Product";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
-import SellerLayout from "./admin/SellerLayout";
-import ProductSeller from "./admin/ProductSeller/ProductSeller";
-import SellerErrorPage from "./admin/SellerErrorPage";
-import DashBoard from "./admin/Dashboard/DashBoard";
-import { AddProduct } from "./admin/ProductSeller/AddProduct/AddProduct";
+import SellerLayout from "./components/admin/SellerLayout";
+import ProductSeller from "./components/admin/ProductSeller/ProductSeller";
+import SellerErrorPage from "./components/admin/SellerErrorPage";
+import DashBoard from "./components/admin/Dashboard/DashBoard";
+import { AddProduct } from "./components/admin/ProductSeller/AddProduct/AddProduct";
 import LoginPage from "./components/auth/Login";
 import Register from "./components/auth/Register";
 
