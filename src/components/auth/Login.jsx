@@ -1,42 +1,126 @@
-import React from "react";
-import { FaUserAlt } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaEnvelope, FaKey } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-function Login() {
+const LoginPage = () => {
+  const [step, setStep] = useState("email"); // email | otp
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    if (!email) return alert("Enter email!");
+    console.log("📧 Email submitted:", email);
+    setStep("otp"); // go to otp step
+  };
+
+  const handleOtpSubmit = (e) => {
+    e.preventDefault();
+    if (!otp) return alert("Enter OTP!");
+    console.log("🔑 OTP submitted:", otp);
+    alert("✅ Login successful!");
+  };
+
   return (
-    <section className="w-full bg-gray-200 h-screen flex items-center justify-center">
-      <div
-        className="md:w-[700px] h-96 bg-blue-500  rounded-lg w-[90%] flex flex-col md:flex-row overflow-hidden"
-        style={{
-          boxShadow: "0 0 20px 1px #12121230",
-        }}
-      >
-        {/* Left Side */}
-        <div className="  text-white flex-1 flex flex-col items-center justify-center p-6">
-          <h1 className="text-3xl font-bold mb-2">@kraviona</h1>
-          <p className="text-sm opacity-80 text-center">
-            Welcome back! Please login to continue.
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-500 via-orange-100 to-orange-50 px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
+        {/* Logo / Title */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-extrabold text-orange-600">Kraviona</h1>
+          <p className="mt-2 text-gray-500 text-sm">
+            {step === "email"
+              ? "Sign in with your email"
+              : "Enter the OTP sent to your email"}
           </p>
         </div>
 
-        {/* Right Side */}
-        <div className="flex-1 flex rounded-l-[900px] bg-white flex-col items-center justify-center p-6">
-          <FaUserAlt className="text-gray-500  bg-gray-200 w-16 h-16 p-3 rounded-full mb-6" />
+        {/* Step 1: Email */}
+        {step === "email" && (
+          <form onSubmit={handleEmailSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address
+              </label>
+              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-orange-500">
+                <FaEnvelope className="text-gray-400 mr-2" />
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 bg-transparent outline-none text-gray-700"
+                  required
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition"
+            >
+              Send OTP
+            </button>
+          </form>
+        )}
 
-          {/* Email Input */}
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+        {/* Step 2: OTP */}
+        {step === "otp" && (
+          <form onSubmit={handleOtpSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Enter OTP
+              </label>
+              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-orange-500">
+                <FaKey className="text-gray-400 mr-2" />
+                <input
+                  type="text"
+                  placeholder="6-digit OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="flex-1 bg-transparent outline-none text-gray-700 tracking-widest text-lg"
+                  maxLength={6}
+                  required
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition"
+            >
+              Verify OTP
+            </button>
+            <p className="text-sm text-gray-500 text-center">
+              Didn’t get OTP?{" "}
+              <button
+                type="button"
+                onClick={() => alert("Resend OTP")}
+                className="text-orange-600 font-semibold hover:underline"
+              >
+                Resend
+              </button>
+            </p>
+          </form>
+        )}
 
-          {/* Send OTP Button */}
-          <button className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
-            Send OTP
-          </button>
+        {/* Divider */}
+        <div className="my-6 flex items-center">
+          <div className="flex-1 h-px bg-gray-200"></div>
+          <span className="px-3 text-gray-400 text-sm">OR</span>
+          <div className="flex-1 h-px bg-gray-200"></div>
         </div>
-      </div>
-    </section>
-  );
-}
 
-export default Login;
+        {/* Create Account */}
+        <p className="text-center text-gray-600 text-sm">
+          Don’t have an account?{" "}
+          <Link
+            to="/register"
+            className="text-orange-600 font-semibold hover:underline"
+          >
+            Create Account
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;
