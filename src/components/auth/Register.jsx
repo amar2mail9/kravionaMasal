@@ -1,120 +1,179 @@
 import React, { useState } from "react";
-import {
-  FaUser,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaHome,
-} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
-function Register() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-    address: "",
-  });
+const Register = () => {
+  const navigate = useNavigate();
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("User");
+  const [otp, setOtp] = useState("");
+  const [otpField, setOtpField] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  // Send OTP
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (!fullname || !email || !password || !phone || !role) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URI}/user/register`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ fullname, email, password, phone, role }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) return toast.error(data.message);
+      
+      if (res.ok && data.success) {
+        toast.success(data.message);
+        setOtpField(true);
+      }
+
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  const handleSubmit = (e) => {
+  // Verify OTP
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    alert("Registration submitted!");
+
+    if (!otp) {
+      toast.error("Enter the OTP");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URI}/user/verify`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) return toast.error(data.message);
+
+      localStorage.setItem("userData", JSON.stringify(data.user));
+      Cookies.set("accessToken", data.user.token, { expires: 1 });
+
+      toast.success("OTP Verified! Account created successfully.");
+      navigate(`/${data.user.userID}`);
+      window.location.reload();
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div
+        className="w-full max-w-md bg-white rounded-lg p-6 sm:p-8"
+        style={{ boxShadow: "0 0 20px rgba(0,0,0,0.1)" }}
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          Register
-        </h2>
+        {/* Brand Name */}
+        <h1 className="text-center text-3xl font-bold text-orange-500 mb-3">
+          Kraviona
+        </h1>
 
-        {/* Name */}
-        <div className="flex items-center border rounded-lg mb-4 px-3 py-2 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-          <FaUser className="text-gray-400 mr-2" />
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            placeholder="Enter your name"
-            className="w-full bg-transparent outline-none text-gray-700"
-          />
-        </div>
+        <h1 className="text-center text-2xl sm:text-3xl font-semibold text-gray-600">
+          {otpField ? "Verify OTP" : "Create Account"}
+        </h1>
 
-        {/* Email */}
-        <div className="flex items-center border rounded-lg mb-4 px-3 py-2 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-          <FaEnvelope className="text-gray-400 mr-2" />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            placeholder="Enter your email"
-            className="w-full bg-transparent outline-none text-gray-700"
-          />
-        </div>
+        {!otpField ? (
+          <form onSubmit={handleRegister} className="flex flex-col mt-8 gap-5">
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullname}
+              onChange={(e) => setFullname(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <input
+              type="password"
+              placeholder="************"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
 
-        {/* Phone */}
-        <div className="flex items-center border rounded-lg mb-4 px-3 py-2 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-          <FaPhone className="text-gray-400 mr-2" />
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-            placeholder="Enter your phone number"
-            className="w-full bg-transparent outline-none text-gray-700"
-          />
-        </div>
+            {/* Role */}
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            >
+              <option value="user">User</option>
+              <option value="seller">Seller</option>
+            </select>
 
-        {/* Location */}
-        <div className="flex items-center border rounded-lg mb-4 px-3 py-2 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-          <FaMapMarkerAlt className="text-gray-400 mr-2" />
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            required
-            placeholder="Enter your city/location"
-            className="w-full bg-transparent outline-none text-gray-700"
-          />
-        </div>
+            <button
+              type="submit"
+              className="w-full p-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-300"
+            >
+              Send OTP
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerifyOtp} className="flex flex-col mt-8 gap-5">
+            <p className="text-gray-600 text-center">
+              OTP sent to <span className="font-semibold">{email}</span>
+            </p>
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <button
+              type="submit"
+              className="w-full p-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300"
+            >
+              Verify OTP
+            </button>
+          </form>
+        )}
 
-        {/* Address */}
-        <div className="flex items-start border rounded-lg mb-6 px-3 py-2 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-          <FaHome className="text-gray-400 mt-2 mr-2" />
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-            placeholder="Enter your full address"
-            className="w-full bg-transparent outline-none text-gray-700 resize-none h-20"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-600 transition"
-        >
-          Register
-        </button>
-      </form>
+        <p className="text-center text-gray-500 mt-6 text-sm sm:text-base">
+          Already have an account?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            className="text-blue-600 cursor-pointer hover:underline"
+          >
+            Login
+          </span>
+        </p>
+      </div>
     </div>
   );
-}
+};
 
 export default Register;

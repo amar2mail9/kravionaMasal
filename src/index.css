@@ -21,3 +21,7 @@
 .swiper-pagination-bullet-active {
   background: #ea580c; /* orange-600 */
 }
+
+*{
+    font-family: 'Poppins', sans-serif;
+}

@@ -44,7 +44,7 @@ export default function ProductSeller() {
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">My Products</h2>
         <Link
-        to={'/product/new'}
+        to={`/${JSON.parse(localStorage.getItem("userData")).userID}/add-product`}
           onClick={handleAdd}
           className="px-5 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold hover:from-orange-600 hover:to-orange-700 transition shadow-md"
         >

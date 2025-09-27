@@ -1,126 +1,243 @@
 import React, { useState } from "react";
-import { FaEnvelope, FaKey } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
-const LoginPage = () => {
-  const [step, setStep] = useState("email"); // email | otp
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { AwardIcon } from "lucide-react";
+import { toast } from "react-toastify";
+const Login = () => {
+  const [showOtpLogin, setShowOtpLogin] = useState(false);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
+  const navigate = useNavigate();
 
-  const handleEmailSubmit = (e) => {
+  // Normal login handler
+  const loginHandler = async (e) => {
     e.preventDefault();
-    if (!email) return alert("Enter email!");
-    console.log("📧 Email submitted:", email);
-    setStep("otp"); // go to otp step
+    if (!email || !password) {
+      toast.error("Please enter both email and password");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URI}/user/password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {   
+        localStorage.setItem("userData", JSON.stringify(data.user));
+        Cookies.set("accessToken", data.user.token, { expires: 1 });
+        if (data.user.role === "seller") {
+         await navigate(`/${data.user.userID}`);
+         window.location.reload();
+        } else {
+          navigate(`/`);
+        }
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.warn("Something went wrong!");
+    }
   };
 
-  const handleOtpSubmit = (e) => {
+  // Send OTP handler
+  const sendOtpHandler = async (e) => {
     e.preventDefault();
-    if (!otp) return alert("Enter OTP!");
-    console.log("🔑 OTP submitted:", otp);
-    alert("✅ Login successful!");
+    if (!email) {
+      toast.warn("Please enter your email");
+      return;
+    }
+    if (!email.endsWith("@gmail.com")) {
+      toast.warn("Please enter a valid gmail address");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URI}/user/resendotp`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await res.json();
+      if (res.ok) {
+        setOtpSent(true);
+        toast.success("OTP sent successfully!");
+      } else {
+        toast.error(data.message);
+      }
+      console.log(data);
+    } catch (error) {
+      console.error("Send OTP error:", error.message);
+      toast.error("Failed to send OTP!");
+    }
+  };
+
+  // Verify OTP handler
+  const verifyOtpHandler = async (e) => {
+    e.preventDefault();
+    if (!otp) {
+      toast.warn("Please enter the OTP");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URI}/user/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      const data = await res.json();
+     
+      if (!data.success) {
+         toast.error(data.message)}
+
+      if (res.ok && data.success) {
+       
+        localStorage.setItem("userData", JSON.stringify(data.user));
+
+        Cookies.set("accessToken", data.user.token, { expires: 1 });
+         toast.success("OTP verified successfully!");
+        navigate(`/${data.user.userID}`);
+        window.location.reload();
+      } 
+    } catch (error) {
+
+      toast.error(error.message);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-100 to-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
-        {/* Logo / Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-orange-600">Kraviona</h1>
-          <p className="mt-2 text-gray-500 text-sm">
-            {step === "email"
-              ? "Sign in with your email"
-              : "Enter the OTP sent to your email"}
-          </p>
-        </div>
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div
+        className="w-full max-w-md bg-white rounded-lg p-6 sm:p-8"
+        style={{ boxShadow: "0 0 20px rgba(0,0,0,0.1)" }}
+      >
+        {!showOtpLogin ? (
+          <>
+            <h1 className="text-center text-2xl sm:text-3xl font-semibold text-gray-600">
+              Sign In
+            </h1>
+            <form onSubmit={loginHandler} className="flex flex-col mt-8 gap-5">
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="example@gmail.com"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="Password"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+              <button
+                type="submit"
+                className="w-full p-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-300"
+              >
+                Login
+              </button>
+            </form>
 
-        {/* Step 1: Email */}
-        {step === "email" && (
-          <form onSubmit={handleEmailSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
-              </label>
-              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-orange-500">
-                <FaEnvelope className="text-gray-400 mr-2" />
+            <div className="flex items-center justify-center my-4">
+              <span className="flex-1 border-b border-gray-300"></span>
+              <span className="px-2 text-gray-500 text-sm">OR</span>
+              <span className="flex-1 border-b border-gray-300"></span>
+            </div>
+
+            <button
+              onClick={() => setShowOtpLogin(true)}
+              className="w-full p-3 border border-orange-500 text-orange-500 rounded-md hover:bg-orange-50 transition duration-300"
+            >
+              Sign in with OTP
+            </button>
+
+            <p className="text-center text-gray-500 mt-6 text-sm sm:text-base">
+              Don’t have an account?{" "}
+              <span
+                onClick={() => navigate("/register")}
+                className="text-blue-600 cursor-pointer hover:underline"
+              >
+                Create Account
+              </span>
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-center text-2xl sm:text-3xl font-semibold text-gray-600">
+              Sign In with OTP
+            </h1>
+            {!otpSent ? (
+              <form
+                onSubmit={sendOtpHandler}
+                className="flex flex-col mt-8 gap-5"
+              >
                 <input
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="Enter your Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 bg-transparent outline-none text-gray-700"
-                  required
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
-              </div>
-            </div>
-            <button
-              type="submit"
-              className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition"
-            >
-              Send OTP
-            </button>
-          </form>
-        )}
-
-        {/* Step 2: OTP */}
-        {step === "otp" && (
-          <form onSubmit={handleOtpSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Enter OTP
-              </label>
-              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-orange-500">
-                <FaKey className="text-gray-400 mr-2" />
+                <button
+                  type="submit"
+                  className="w-full p-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-300"
+                >
+                  Send OTP
+                </button>
+              </form>
+            ) : (
+              <form
+                onSubmit={verifyOtpHandler}
+                className="flex flex-col mt-6 gap-5"
+              >
+                <h2 className="text-gray-500 text-sm sm:text-base">
+                  OTP sent on{" "}
+                  <span className="text-indigo-700 font-medium">
+                    {email || "example@gmail.com"}
+                  </span>
+                </h2>
                 <input
                   type="text"
-                  placeholder="6-digit OTP"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className="flex-1 bg-transparent outline-none text-gray-700 tracking-widest text-lg"
-                  maxLength={6}
-                  required
+                  placeholder="Enter Your OTP"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
-              </div>
-            </div>
-            <button
-              type="submit"
-              className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition"
-            >
-              Verify OTP
-            </button>
-            <p className="text-sm text-gray-500 text-center">
-              Didn’t get OTP?{" "}
-              <button
-                type="button"
-                onClick={() => alert("Resend OTP")}
-                className="text-orange-600 font-semibold hover:underline"
+                <button
+                  type="submit"
+                  className="w-full p-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-300"
+                >
+                  Verify OTP
+                </button>
+              </form>
+            )}
+
+            <p className="text-center text-gray-500 mt-6 text-sm sm:text-base">
+              Back to{" "}
+              <span
+                onClick={() => setShowOtpLogin(false)}
+                className="text-blue-600 cursor-pointer hover:underline"
               >
-                Resend
-              </button>
+                Email Login
+              </span>
             </p>
-          </form>
+          </>
         )}
-
-        {/* Divider */}
-        <div className="my-6 flex items-center">
-          <div className="flex-1 h-px bg-gray-200"></div>
-          <span className="px-3 text-gray-400 text-sm">OR</span>
-          <div className="flex-1 h-px bg-gray-200"></div>
-        </div>
-
-        {/* Create Account */}
-        <p className="text-center text-gray-600 text-sm">
-          Don’t have an account?{" "}
-          <Link
-            to="/register"
-            className="text-orange-600 font-semibold hover:underline"
-          >
-            Create Account
-          </Link>
-        </p>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default Login;
