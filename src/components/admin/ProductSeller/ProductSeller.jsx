@@ -16,8 +16,9 @@ export default function ProductSeller() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URI}/products`);
+        const res = await fetch(`${import.meta.env.VITE_API_URI}/public/products`);
         const data = await res.json();
+
 
         if (data.success) {
           setProducts(data.products);
