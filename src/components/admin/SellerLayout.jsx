@@ -1,6 +1,8 @@
+import { LogOut } from "lucide-react";
 import React, { useState } from "react";
 import { FaBell, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
+import cookiies from "js-cookie"
 
 const SellerLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -42,6 +44,12 @@ const SellerLayout = ({ children }) => {
               </Link>
             );
           })}
+
+          <button onClick={() => {
+            localStorage.removeItem("userData")
+            cookiies.remove("accessToken")
+            window.location.href="/login"
+          }} className="flex items-center justify-center w-full bg-rose-500 text-white py-2 rounded-full hover:bg-rose-600 font-semibold transition-all ease-in-out duration-300 cursor-pointer 1"><LogOut /> Logout </button>
         </nav>
       </div>
 
@@ -89,7 +97,7 @@ const SellerLayout = ({ children }) => {
             </button>
 
             <h1 className="text-lg md:text-xl font-semibold text-gray-800">
-              Welcome, <span className="text-orange-600 font-bold">Amar</span>
+              Welcome, <span className="text-orange-600 font-bold">{userData.fullname}</span>
             </h1>
           </div>
 

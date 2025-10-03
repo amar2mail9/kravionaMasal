@@ -5,7 +5,7 @@ function DashBoard() {
   return (
     <SellerLayout>
       <section>
-        Dash border
+        Dash Board
       </section>
     </SellerLayout>
   )
