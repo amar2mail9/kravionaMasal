@@ -53,8 +53,8 @@ function Home() {
   return (
     <Layout>
       <MasalBanner />
-      <LatestProduct products={products} />
-      <FeaturedCategories categories={categories} />
+      <LatestProduct products={products} loading={loading} />
+      <FeaturedCategories categories={categories} loading={loading} />
       <BestSellers />
     </Layout>
   );
