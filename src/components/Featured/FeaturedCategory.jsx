@@ -34,7 +34,7 @@ const categories = [
   },
 ];
 
-const FeaturedCategories = () => {
+const FeaturedCategories = ({ categories }) => {
   return (
     <section className="px-4 md:px-[8%] lg:px-36 py-10 bg-gray-50">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
@@ -44,20 +44,20 @@ const FeaturedCategories = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
         {categories.map((cat) => (
           <div
-            key={cat.id}
+            key={cat._id}
             className="bg-white rounded-xl shadow-sm p-3 text-center overflow-hidden"
           >
             <div className="h-36 w-full rounded-md overflow-hidden mb-3 bg-gray-50 flex items-center justify-center">
               <img
                 src={cat.image}
-                alt={cat.name}
+                alt={cat.categoryName}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
             </div>
-            <h3 className="font-semibold text-gray-700">{cat.name}</h3>
+            <h3 className="font-semibold text-gray-700">{cat.categoryName}</h3>
             <p className="text-sm text-slate-500 mt-1">
-              Premium {cat.name.toLowerCase()}
+              Premium {cat.categoryName.toLowerCase()}
             </p>
           </div>
         ))}

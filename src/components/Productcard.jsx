@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const ProductCard = ({
-  id,
+  slug,
   title = "Essence Mascara Lash Princess",
   category = "Masala",
   price = 9.99,
@@ -29,9 +29,9 @@ export const ProductCard = ({
       <div className="relative w-full h-[180px] bg-gray-50 flex items-center justify-center">
         {/* Category Badge */}
         <span className="absolute top-2 left-2 bg-orange-500 text-white text-xs font-medium px-2 py-1 rounded-md">
-          {category}
+          {category.length > 15 ? category.slice(0, 15) + "..." : category}
         </span>
-        <Link to={`/${id}`}>
+        <Link to={`/${slug}`}>
           <img
             loading="lazy"
             src={thumbnail}
@@ -44,7 +44,7 @@ export const ProductCard = ({
       {/* Product Details */}
       <div className="p-4 flex flex-col flex-1">
         <h2 className="text-gray-800 font-semibold text-sm sm:text-base line-clamp-2">
-          {title}
+          {title.length > 40 ? title.slice(0, 40) + "..." : title}
         </h2>
 
         {/* Price + Discount */}
@@ -66,7 +66,7 @@ export const ProductCard = ({
 
         {/* View Button */}
         <Link
-          to={`/product/${id}`}
+          to={`/product/${slug}`}
           className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg transition-colors text-center"
         >
           View Product

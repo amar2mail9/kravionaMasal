@@ -5,7 +5,7 @@ import Layout from "../Layout/Layout";
 import { motion } from "framer-motion";
 import { ProductCard } from "../Productcard";
 
-function Product() {
+function Product({}) {
   const products = [
     {
       image:
