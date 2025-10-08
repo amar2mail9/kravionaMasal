@@ -12,14 +12,9 @@ const Footer = () => {
       <div className="relative max-w-6xl mx-auto py-12 px-6 md:px-20 grid md:grid-cols-3 gap-10 text-center md:text-left">
         {/* Brand Info */}
         <div>
-          <section>
-            <Link to={"/"}>
-              <h1 className="md:text-4xl text-2xl font-extrabold tracking-wide">
-                <span className="text-orange-400">Kra</span>
-                <span className="text-emerald-500">viona</span>
-              </h1>
-            </Link>
-          </section>
+          <div className="w-16 h-16 rounded-full border-2 border-orange-500 ">
+            <img src="/logo.svg" alt="" className="w-full h-full object-cover rounded-full p-1" />
+          </div>
           <p className="text-sm text-gray-400 mt-2">
             Authentic spices, crafted with love ❤️ Experience the true taste of
             India in every pinch!
@@ -79,8 +74,36 @@ const Footer = () => {
 
       {/* Bottom Section */}
       <div className="relative border-t border-gray-700 text-center py-4 text-sm text-gray-400">
-        © {new Date().getFullYear()} Kraviona Masala. All rights reserved.
+        © {new Date().getFullYear()} DS Masala. All rights reserved.
       </div>
+      {/* Bottom Section */}
+      <div className="relative border-t border-gray-700 bg-gray-900 text-gray-300 text-center py-6 px-4 md:px-20 flex flex-col md:flex-row justify-between items-center gap-3">
+
+        {/* Service Info */}
+        <p className="text-sm md:text-base">
+          Contact us for <span className="text-orange-500 font-semibold">website development</span>
+        </p>
+
+        {/* Contact Info */}
+        <div className="flex flex-col md:flex-row items-center gap-4 text-sm md:text-base">
+          <span>
+            📞 <a href="tel:+919608553167" className="hover:text-orange-500 transition">+91 9608553167</a>
+          </span>
+          <span>
+            ✉️ <a href="mailto:polytechub@gmail.com" className="hover:text-orange-500 transition">polytechub@gmail.com</a>
+          </span>
+          <span>
+            🌐 <a href="https://polytechub.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition">polytechub.vercel.app</a>
+          </span>
+        </div>
+
+        {/* Copyright */}
+        <p className="text-xs text-gray-500 mt-2 md:mt-0">
+          © {new Date().getFullYear()} Polytechub. All rights reserved.
+        </p>
+
+      </div>
+
     </footer>
   );
 };

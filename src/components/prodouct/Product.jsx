@@ -6,37 +6,28 @@ import { motion } from "framer-motion";
 import { ProductCard } from "../Productcard";
 
 function Product({}) {
-  const products = [
-    {
-      image:
-        "https://veganwithgusto.com/wp-content/uploads/2023/01/garam-masala-featured.jpg",
-      title: "Garam Masala",
-      price: 1200,
-      discount: 20,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1626076064161-7c6d8db36805?q=80&w=800",
-      title: "Chilli Powder",
-      price: 800,
-      discount: 15,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1605477701733-51aa26d4e9e4?q=80&w=800",
-      title: "Turmeric Powder",
-      price: 600,
-      discount: 10,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1615485737564-7b875d4d4f5c?q=80&w=800",
-      title: "Coriander Powder",
-      price: 700,
-      discount: 18,
-    },
-  ];
+ const [products, setProducts] = React.useState([]);
+ const [loading, setLoading] = React.useState(false);
+ const [categories, setCategories] = React.useState([]);
+ const fetchProducts = async () => {
+   setLoading(true);
+   try {
+     const response = await fetch(`${import.meta.env.VITE_API_URI}/products`);
+     const data = await response.json();
+     setProducts(data.products);
+   } catch (error) {
+     console.error("Error fetching products:", error);
+   } finally {
+     setLoading(false);
+   }
+ };
+ React.useEffect(() => {
+   fetchProducts();
+ }, []);
 
+//
+// Helper function to calculate discounted price
+//
   const getDiscountedPrice = (p) => p.price - (p.price * p.discount) / 100;
 
   return (
@@ -60,7 +51,7 @@ function Product({}) {
       </section>
 
       {/* Products Section */}
-      <section className=" mx-auto gap-2 py-12 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+      <section className=" mx-auto gap-2 py-12 px-[8%] grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
         {products.map((p, idx) => (
           <motion.div
             key={idx}

@@ -14,9 +14,9 @@ function About() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-extrabold text-orange-900"
+            className="text-4xl md:text-5xl font-extrabold text-orange-500"
           >
-            About <span className="text-orange-600">Kraviona</span>
+            About <span className="text-orange-600">DS</span>
           </motion.h1>
           <p className="mt-4 text-lg text-slate-700">
             We are passionate about delivering high-quality masala products that
@@ -32,7 +32,7 @@ function About() {
             className="rounded-2xl shadow-lg"
           />
           <div>
-            <h2 className="text-3xl font-bold text-orange-800">Our Mission</h2>
+            <h2 className="text-3xl font-bold text-orange-500">Our Mission</h2>
             <p className="mt-4 text-slate-700 leading-relaxed">
               At Kraviona, our mission is to provide pure, natural and aromatic
               spices that enhance every dish. We focus on authenticity, customer
@@ -43,7 +43,7 @@ function About() {
 
         {/* Why Choose Us */}
         <div className="max-w-6xl mx-auto mt-20 text-center">
-          <h2 className="text-3xl font-bold text-orange-800">Why Choose Us</h2>
+          <h2 className="text-3xl font-bold text-orange-500">Why Choose Us</h2>
           <p className="mt-3 text-slate-700">
             Here’s why families trust us for their kitchen essentials.
           </p>
@@ -77,7 +77,7 @@ function About() {
 
         {/* Team Section */}
         <div className="max-w-6xl mx-auto mt-20 text-center">
-          <h2 className="text-3xl font-bold text-orange-800">Meet Our Team</h2>
+          <h2 className="text-3xl font-bold text-orange-500">Meet Our Team</h2>
           <p className="mt-3 text-slate-700">The people behind Kraviona</p>
           <div className="mt-10 grid md:grid-cols-3 gap-8">
             {[
@@ -106,7 +106,7 @@ function About() {
                   alt={member.name}
                   className="w-24 h-24 rounded-full object-cover shadow-md"
                 />
-                <h3 className="mt-4 text-lg font-bold text-gray-800">
+                <h3 className="mt-4 text-lg font-bold text-gray-500">
                   {member.name}
                 </h3>
                 <p className="text-orange-600 font-medium">{member.role}</p>

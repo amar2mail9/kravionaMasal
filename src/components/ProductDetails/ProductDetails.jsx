@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import Layout from "../Layout/Layout";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
@@ -6,24 +6,53 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../../App.css";
+import { Link, useParams } from "react-router-dom";
 
 const ProductDetails = () => {
-  const product = {
-    title: "Premium Garam Masala",
-    category: "Spices & Masala",
-    price: 249,
-    discount: 15,
-    rating: 4.5,
-    stock: 120,
-    description:
-      "Handpicked premium quality Garam Masala with rich aroma and authentic taste. Perfect for enhancing flavor in every dish.",
-    images: [
-      "https://www.freeiconspng.com/uploads/spices-png-photo-3.png",
-      "https://www.freeiconspng.com/uploads/spices-image-transparent-4.png",
-      "https://www.kindpng.com/picc/m/274-2741352_spices-png-transparent-png.png",
-      "https://www.freeiconspng.com/uploads/spices-png-photo-6.png",
-    ],
-  };
+  const slug = useParams().slug;
+  const [product, setProduct] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URI}/product/${slug}`
+        );
+        const data = await response.json();
+        setProduct(data.product);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!product) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-gray-500">Product not found.</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  console.log(product);
 
   // Discounted Price
   const discountedPrice = (
@@ -47,9 +76,9 @@ const ProductDetails = () => {
                 <SwiperSlide key={index}>
                   <img
                     loading="lazy"
-                    src={img}
+                    src={img.url}
                     alt={`Product ${index + 1}`}
-                    className="w-full h-full object-contain  rounded-2xl "
+                    className="w-full h-full object-center   object-fill rounded-2xl "
                   />
                 </SwiperSlide>
               ))}
@@ -100,9 +129,10 @@ const ProductDetails = () => {
 
             {/* Buttons */}
             <div className="flex gap-4 flex-wrap pt-4">
+              <Link to={'/contact-us'}>
               <button className="px-6 py-3 rounded-xl border border-orange-600 text-orange-600 font-semibold hover:bg-orange-50 transition">
                 Contact
-              </button>
+                </button></Link>
             </div>
           </div>
         </div>

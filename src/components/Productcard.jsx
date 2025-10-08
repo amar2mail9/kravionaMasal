@@ -5,71 +5,65 @@ export const ProductCard = ({
   slug,
   title = "Essence Mascara Lash Princess",
   category = "Masala",
-  price = 9.99,
-  discountPercentage = 10.48,
+  price = 99.99,
+  discount = 10,
   thumbnail = "https://png.pngtree.com/png-vector/20240810/ourlarge/pngtree-homemade-garam-masala-sabut-a-spicy-blend-of-whole-spices-for-png-image_13440735.png",
 }) => {
-  // Discounted price calculate
-  const discountedPrice = (price - (price * discountPercentage) / 100).toFixed(
-    2
-  );
+  const discountedPrice = (price - (price * discount) / 100).toFixed(2);
 
   return (
     <div
       className="
-        w-full sm:w-[250px] lg:w-[260px]
-        rounded-xl overflow-hidden
-        flex flex-col
-        bg-white shadow-md hover:shadow-2xl
-        transition-all duration-300 hover:-translate-y-1
-        mx-auto
+        bg-white rounded-xl shadow-sm border border-gray-100
+        hover:shadow-lg transition-all duration-300
+        hover:-translate-y-1 flex flex-col overflow-hidden
       "
     >
       {/* Product Image */}
-      <div className="relative w-full h-[180px] bg-gray-50 flex items-center justify-center">
+      <div className="relative h-52 w-full rounded-t-xl overflow-hidden bg-gray-50 flex items-center justify-center">
         {/* Category Badge */}
-        <span className="absolute top-2 left-2 bg-orange-500 text-white text-xs font-medium px-2 py-1 rounded-md">
+        <span className="absolute top-2 left-2 z-10 bg-orange-100 text-orange-600 text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
           {category.length > 15 ? category.slice(0, 15) + "..." : category}
         </span>
-        <Link to={`/${slug}`}>
+
+        <Link to={`/product/${slug}`} className="block w-full h-full">
           <img
             loading="lazy"
             src={thumbnail}
             alt={title}
-            className="w-full h-full object-contain p-4"
+            className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
           />
         </Link>
       </div>
 
-      {/* Product Details */}
-      <div className="p-4 flex flex-col flex-1">
-        <h2 className="text-gray-800 font-semibold text-sm sm:text-base line-clamp-2">
-          {title.length > 40 ? title.slice(0, 40) + "..." : title}
-        </h2>
+      {/* Product Info */}
+      <div className="p-4 flex flex-col justify-between flex-1">
+        {/* Title */}
+        <h3 className="text-gray-800 font-semibold text-sm sm:text-base line-clamp-2 leading-snug min-h-[40px]">
+          {title.length > 45 ? title.slice(0, 45) + "..." : title}
+        </h3>
 
-        {/* Price + Discount */}
-        <div className="flex flex-wrap items-center gap-2 mt-3">
-          <span className="text-lg font-bold text-gray-900">
-            ₹{discountedPrice}
-          </span>
-          {discountPercentage > 0 && (
+        {/* Price Section */}
+        <div className="flex items-center gap-2 mt-3">
+          <span className="text-lg font-bold text-gray-900">₹{discountedPrice}</span>
+          {discount > 0 && (
             <>
-              <span className="line-through text-sm text-gray-400">
-                ₹{price.toFixed(2)}
-              </span>
-              <span className="text-sm text-green-600 font-semibold">
-                -{discountPercentage}%
-              </span>
+              <span className="line-through text-sm text-gray-400">₹{price}</span>
+              <span className="text-sm font-semibold text-green-600">-{discount}%</span>
             </>
           )}
         </div>
 
-        {/* View Button */}
+        {/* Button */}
         <Link
           to={`/product/${slug}`}
-          className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg transition-colors text-center"
+          className="
+            mt-4 w-full bg-orange-500 hover:bg-orange-600
+            text-white text-sm font-medium py-2.5 rounded-lg
+            text-center transition-colors
+          "
         >
-          View Product
+          View Details
         </Link>
       </div>
     </div>

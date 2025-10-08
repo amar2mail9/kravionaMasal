@@ -55,7 +55,7 @@ function Home() {
       <MasalBanner />
       <LatestProduct products={products} loading={loading} />
       <FeaturedCategories categories={categories} loading={loading} />
-      <BestSellers />
+      <BestSellers products={products} />
     </Layout>
   );
 }

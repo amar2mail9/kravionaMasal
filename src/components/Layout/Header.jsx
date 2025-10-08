@@ -43,14 +43,9 @@ const Header = () => {
   return (
     <header className="bg-white w-full md:px-[8%] lg:px-36 py-4 px-4 flex items-center sticky shadow-md justify-between  top-0 left-0 z-50">
       {/* Logo */}
-      <section>
-        <Link to={"/"}>
-          <h1 className="md:text-4xl text-2xl text-emerald-600 font-extrabold tracking-wide">
-            Kra<span className="text-orange-500">viona</span>
-          </h1>
-        </Link>
-      </section>
-
+      <div className="w-16 h-16 rounded-full border-2 border-orange-500 ">
+        <img src="/logo.svg" alt="" className="w-full h-full object-cover rounded-full p-1" />
+      </div>
       {/* Desktop Menu + Search */}
       <section className="hidden lg:flex items-center gap-8">
         {/* Search Icon */}

@@ -16,8 +16,8 @@ export default function LandingBanner() {
       >
         {/* Left Side Text */}
         <div className="flex-1 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-orange-900 leading-tight">
-            Kraviona Masal Products
+          <h1 className="text-4xl md:text-5xl font-extrabold text-orange-600 leading-tight">
+            DS Masal Products
           </h1>
           <p className="mt-4 text-lg text-slate-700 max-w-xl">
             Authentic, pure and aromatic masala blends crafted to bring
