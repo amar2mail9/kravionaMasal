@@ -8,6 +8,7 @@ import Contact from "./components/Contact/Contact";
 import About from "./components/About/About";
 import Product from "./components/prodouct/Product";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
+import SearchResult from "./components/searchresult/SearchResult";
 
 
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/about-us" element={<About />} />
         <Route path="/products" element={<Product />} />
         <Route path="/product/:slug" element={<ProductDetails />} />
+        <Route path="/search-result/:keyword" element={<SearchResult />} />
 
         {/* Catch-all Route */}
         <Route path="*" element={<ErrorPage />} />

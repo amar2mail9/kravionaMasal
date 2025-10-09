@@ -3,6 +3,7 @@
 import React from "react";
 import Layout from "../Layout/Layout";
 import { motion } from "framer-motion";
+import { TeamMembers } from "../../assets/Context/data";
 
 function About() {
   return (
@@ -34,7 +35,7 @@ function About() {
           <div>
             <h2 className="text-3xl font-bold text-orange-500">Our Mission</h2>
             <p className="mt-4 text-slate-700 leading-relaxed">
-              At Kraviona, our mission is to provide pure, natural and aromatic
+              At DS, our mission is to provide pure, natural and aromatic
               spices that enhance every dish. We focus on authenticity, customer
               satisfaction, and long-term trust with our community.
             </p>
@@ -78,25 +79,9 @@ function About() {
         {/* Team Section */}
         <div className="max-w-6xl mx-auto mt-20 text-center">
           <h2 className="text-3xl font-bold text-orange-500">Meet Our Team</h2>
-          <p className="mt-3 text-slate-700">The people behind Kraviona</p>
+          <p className="mt-3 text-slate-700">The people behind DS</p>
           <div className="mt-10 grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Amar Kumar",
-                role: "Founder & Developer",
-                img: "https://polytechub.vercel.app/myImage.jpeg",
-              },
-              {
-                name: "Priya Sharma",
-                role: "UI/UX Designer",
-                img: "https://plus.unsplash.com/premium_photo-1688350808212-4e6908a03925?q=80&w=1169&auto=format&fit=crop",
-              },
-              {
-                name: "Rahul Verma",
-                role: "Backend Engineer",
-                img: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=600&auto=format&fit=crop&q=60",
-              },
-            ].map((member, idx) => (
+            {TeamMembers.map((member, idx) => (
               <div
                 key={idx}
                 className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center hover:shadow-2xl transition-all"

@@ -129,7 +129,7 @@ const Header = () => {
       {/* Search Modal */}
       <Modal open={openSearch} onClose={handleCloseSearch}>
         <Box sx={styleSearch}>
-          <Search />
+          <Search openSearch={openSearch} setOpenSearch={setOpenSearch} />
         </Box>
       </Modal>
     </header>
