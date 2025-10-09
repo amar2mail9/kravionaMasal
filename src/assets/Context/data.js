@@ -12,9 +12,5 @@ export const TeamMembers = [
                 role: "Owner & Marketing",
                 img: "/deepu.png",
               },
-              {
-                name: "Rahul Verma",
-                role: "Backend Engineer",
-                img: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=600&auto=format&fit=crop&q=60",
-              },
+              
             ]
